@@ -2,8 +2,6 @@
 
 API REST para gerenciamento escolar desenvolvida com Fastify e Prisma.
 
-## 🚨🚨🚨 Criei uma seed que executa junto do docker, para subir dados fake no BD 🚨🚨🚨
-
 ## o arquivo seed fica localizado em prisma -> seed.ts
 
 ## Como executar o projeto
@@ -57,6 +55,8 @@ docker-compose down
 docker-compose down
 docker-compose up --build -d
 ```
+
+### 🚨🚨🚨 Criei uma seed para criar alguns professores/salas/assunto automaticamente após subir os containers no docker.
 
 ### Logs
 
