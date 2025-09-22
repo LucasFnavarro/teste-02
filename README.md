@@ -2,8 +2,6 @@
 
 API REST para gerenciamento escolar desenvolvida com Fastify e Prisma.
 
-## o arquivo seed fica localizado em prisma -> seed.ts
-
 ## Como executar o projeto
 
 ### Pré-requisitos
