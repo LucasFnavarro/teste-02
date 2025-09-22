@@ -8,48 +8,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Department {
+  id         String      @id @default(uuid())
+  name       String
+  professors Professor[]
+}
+
+model Title {
+  id         String      @id @default(uuid())
+  name       String
+  professors Professor[]
+}
+
 model Professor {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid())
   name         String
-  departmentId Int
-  titleId      Int
+  departmentId String?
+  titleId      String?
   subjects     Subject[] @relation("ProfSubjects")
+
+  Department Department? @relation(fields: [departmentId], references: [id])
+  Title      Title?      @relation(fields: [titleId], references: [id])
 }
 
 model Subject {
-  id          Int        @id @default(autoincrement())
+  id          String  @id @default(uuid())
   code        String
   name        String
-  teacherId   Int?
-  classes     Class[]
-  professor   Professor? @relation("ProfSubjects", fields: [professorId], references: [id])
-  professorId Int?
+  professorId String?
+
+  professor Professor? @relation("ProfSubjects", fields: [professorId], references: [id])
+  classes   Class[]
 }
 
 model Class {
-  id        Int             @id @default(autoincrement())
-  subjectId Int
+  id        String  @id @default(uuid())
+  subjectId String?
   year      Int
   semester  Int
   code      String
-  schedule  ClassSchedule[]
-  Subject   Subject         @relation(fields: [subjectId], references: [id])
+
+  Subject  Subject?        @relation(fields: [subjectId], references: [id])
+  schedule ClassSchedule[]
 }
 
 model ClassSchedule {
-  id        Int    @id @default(autoincrement())
-  classId   Int
-  roomId    Int
+  id        String  @id @default(uuid())
+  classId   String?
+  roomId    String?
   dayOfWeek String
   startTime String
   endTime   String
-  Class     Class  @relation(fields: [classId], references: [id])
-  Room      Room   @relation(fields: [roomId], references: [id])
+
+  Class Class? @relation(fields: [classId], references: [id])
+  Room  Room?  @relation(fields: [roomId], references: [id])
 }
 
 model Room {
-  id         Int             @id @default(autoincrement())
-  buildingId Int
+  id         String          @id @default(uuid())
+  buildingId String?
   name       String
+  disponivel Boolean         @default(true)
   schedules  ClassSchedule[]
 }

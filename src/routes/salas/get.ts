@@ -12,12 +12,14 @@ export async function pegarSalas(app: FastifyInstance) {
         day: sch.dayOfWeek,
         startTime: sch.startTime,
         endTime: sch.endTime,
+        disponivel: room.disponivel,
       }));
 
       return {
         roomId: room.id,
         roomName: room.name,
         ocupados,
+        disponivel: room.disponivel,
       };
     });
 
