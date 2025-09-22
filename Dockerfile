@@ -1,23 +1,22 @@
-# Use Node LTS
+# Use Node LTS (Linux)
 FROM node:20
 
-# Criar diretório da app
+# Definir diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copiar package.json e package-lock.json
+# Copiar apenas package.json e package-lock.json primeiro
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm install
+# Instalar dependências dentro do container (Linux)
+RUN npm ci
 
-# Copiar o restante do código
+# Copiar o restante do código sem trazer node_modules do host
 COPY . .
 
-# Rodar comando do Prisma para gerar client
+# Gerar Prisma Client
 RUN npx prisma generate
 
-# Expor porta que o Fastify vai usar
-EXPOSE 3000
+# Expõe a porta que o Fastify vai usar
+EXPOSE 3333
 
-# Rodar a aplicação
-CMD ["node", "src/index.js"]
+# Comando será definido no docker-compose.yml

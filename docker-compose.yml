@@ -1,32 +1,36 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgresdocker
+      POSTGRES_PASSWORD: docker
       POSTGRES_DB: escola_do_chavito
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgresdocker -d escola_do_chavito"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
-    container_name: fastify_app
+    container_name: escola_do_chavito
     restart: always
     ports:
-      - "3000:3000"
+      - "3333:3333"
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/mydb?schema=public"
+      DATABASE_URL: "postgresql://postgresdocker:docker@db:5432/escola_do_chavito?schema=public"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
-      - .:/usr/src/app
-    command: sh -c "npx prisma migrate deploy && node src/index.js"
+      - .:/usr/src/app:cached
+    command: sh -c "npm ci && npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npx tsx src/server.ts"
 
 volumes:
   db-data:
